@@ -47,7 +47,7 @@ sleep 10
 cd 
 git config --global user.name "root"
 git config --global user.email root@precise64
-git clone git://192.168.100.132/cidev/AASample.git
+git clone https://github.com/ootaken/AASample.git
 cd AASample/
 rm -rf .git
 git init
