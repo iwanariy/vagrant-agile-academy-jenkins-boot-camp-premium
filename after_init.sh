@@ -56,6 +56,9 @@ git commit -m "init"
 git remote add origin git://localhost/git/AASample.git
 git push origin master
 
+git config --global user.name "vagrant"
+git config --global user.email vagrant@precise64
+
 sudo ln -s -f /dev/null /etc/udev/rules.d/70-persistent-net.rules
 sudo ln -f -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
@@ -63,3 +66,6 @@ echo "Asia/Tokyo" > timezone
 sudo cp timezone /etc/timezone
 rm timezone
 dpkg-reconfigure -f noninteractive tzdata
+
+## Set Lang
+sudo apt-get -y install otf-ipafont-mincho
