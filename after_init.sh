@@ -7,9 +7,9 @@ sudo apt-get update
 sudo apt-get -y install google-chrome-stable
 
 ## Download ChromeDriver, Deploy it to PATH
-wget https://chromedriver.googlecode.com/files/chromedriver_linux32_2.2.zip
+wget http://chromedriver.storage.googleapis.com/2.9/chromedriver_linux32.zip
 sudo apt-get -y install unzip
-sudo unzip chromedriver_linux32_2.2.zip 
+sudo unzip chromedriver_linux32.zip 
 sudo chmod 755 chromedriver
 sudo mv chromedriver /usr/bin/
 
@@ -46,7 +46,7 @@ sleep 10
 ## Clone AASample and add remote
 cd 
 git config --global user.name "root"
-git config --global user.email root@precise64
+git config --global user.email root@precise32
 git clone https://github.com/ootaken/AASample.git
 cd AASample/
 rm -rf .git
@@ -57,7 +57,7 @@ git remote add origin git://localhost/git/AASample.git
 git push origin master
 
 git config --global user.name "vagrant"
-git config --global user.email vagrant@precise64
+git config --global user.email vagrant@precise32
 
 sudo ln -s -f /dev/null /etc/udev/rules.d/70-persistent-net.rules
 sudo ln -f -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
