@@ -1,45 +1,45 @@
 #!/bin/sh
 
-## Install Chrome
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-sudo apt-get update
-sudo apt-get -y install google-chrome-stable
+apt-get update
 
-## Download ChromeDriver, Deploy it to PATH
-wget http://chromedriver.storage.googleapis.com/2.9/chromedriver_linux32.zip
-sudo apt-get -y install unzip
-sudo unzip chromedriver_linux32.zip 
-sudo chmod 755 chromedriver
-sudo mv chromedriver /usr/bin/
+## Install chromium-driver
+apt-get -y install unzip chromium-chromedriver
+wget http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux32.zip
+unzip chromedriver_linux32.zip 
+mv chromedriver /usr/bin
 
 ## Install Firefox
-sudo apt-get -y install firefox
+apt-get -y install firefox
+wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux32.tar.gz
+tar -zxvf geckodriver-v0.17.0-linux32.tar.gz 
+mv geckodriver /usr/bin
 
-## Install Xvfb
-sudo apt-get -y install xvfb
-sudo apt-get -y install vim
-sudo apt-get install -y openjdk-7-jdk
-sudo update-alternatives --set java /usr/lib/jvm/java-7-openjdk-i386/jre/bin/java
-sudo apt-get install -y maven
-sudo apt-get install -y tomcat7 tomcat7-admin tomcat7-examples
-sudo sed -i -e 's/<Connector port="8080"/<Connector port="8888"/' /etc/tomcat7/server.xml
-sudo sed -i -e 's/\(<tomcat-users>\)/\1<user username="admin" password="admin" roles="manager-gui,manager-script"\/>/' /etc/tomcat7/tomcat-users.xml
-sudo /etc/init.d/tomcat7 restart
+## Install Java 8
+apt-get -y install software-properties-common python-software-properties
+add-apt-repository ppa:openjdk-r/ppa
+apt-get update
+apt-get install -y openjdk-8-jdk
+update-alternatives --set java /usr/lib/jvm/java-8-openjdk-i386/jre/bin/java
 
-## Startt git-deamon
-sudo apt-get -y install git-daemon-run
+## Install Xvfb and Tomcat 7
+apt-get -y install xvfb vim maven tomcat7 tomcat7-admin tomcat7-examples
+sed -i -e 's/<Connector port="8080"/<Connector port="8888"/' /etc/tomcat7/server.xml
+sed -i -e 's/\(<tomcat-users>\)/\1<user username="admin" password="admin" roles="manager-gui,manager-script"\/>/' /etc/tomcat7/tomcat-users.xml
+/etc/init.d/tomcat7 restart
 
-sudo sed -i -e 's/\(--base-path=\/var\/cache \/var\/cache\/git\)/--enable=receive-pack \1/' /etc/sv/git-daemon/run
-sudo sv start git-daemon
-cd /var/cache/git/
-sudo mkdir AASample.git
+## Start git-deamon
+apt-get -y install git-daemon-run
+
+sed -i -e 's/\(--base-path=\/var\/lib \/var\/lib\/git\)/--enable=receive-pack \1/' /etc/sv/git-daemon/run
+sv start git-daemon
+cd /var/lib/git/
+mkdir AASample.git
 ls -al
 cd AASample.git/
-sudo git init --bare
-sudo touch git-daemon-export-ok
+git init --bare
+touch git-daemon-export-ok
 cd ../
-sudo chown -R gitdaemon:root AASample.git
+chown -R gitdaemon:root AASample.git
 
 sleep 10
 
@@ -59,13 +59,12 @@ git push origin master
 git config --global user.name "vagrant"
 git config --global user.email vagrant@precise32
 
-sudo ln -s -f /dev/null /etc/udev/rules.d/70-persistent-net.rules
-sudo ln -f -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+ln -s -f /dev/null /etc/udev/rules.d/70-persistent-net.rules
+ln -f -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 echo "Asia/Tokyo" > timezone
-sudo cp timezone /etc/timezone
+cp timezone /etc/timezone
 rm timezone
 dpkg-reconfigure -f noninteractive tzdata
-
-## Set Lang
-sudo apt-get -y install otf-ipafont-mincho
+apt-get -y install language-pack-ja
+localectl set-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" 
